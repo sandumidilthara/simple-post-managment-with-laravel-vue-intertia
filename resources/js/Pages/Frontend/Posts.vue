@@ -65,6 +65,11 @@
                     :key="post.id"
                     class="bg-gray-800 border border-gray-700 rounded-lg shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden"
                 >
+                    <!-- Top Bar - Blue to Green gradient -->
+                    <div
+                        class="h-1 bg-gradient-to-r from-blue-500 to-green-500"
+                    ></div>
+
                     <!-- Post Content -->
                     <div class="p-6">
                         <!-- Title -->
