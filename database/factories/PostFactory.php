@@ -20,6 +20,7 @@ class PostFactory extends Factory
             'title' => fake()->sentence(),
             'body' => fake()->paragraph(),
             'category_id' => Category::factory(),
+        
         ];
     }
 }

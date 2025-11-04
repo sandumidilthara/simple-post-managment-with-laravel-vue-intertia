@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
@@ -10,7 +11,7 @@ class StorePostRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return true; // Authentication check කරන්න නම් මෙතන logic එකතු කරන්න
+        return true;
     }
 
     /**
@@ -32,33 +33,44 @@ class StorePostRequest extends FormRequest
                 'min:10',
                 'not_regex:/<script\b[^>]*>(.*?)<\/script>/i',
             ],
+            'category_id' => [
+                'required',
+                'exists:categories,id',
+            ],
+            'tags' => [
+                'nullable',
+                'array',
+            ],
         ];
     }
 
     /**
-     * Get custom error messages
+     * Custom error messages.
      */
     public function messages(): array
     {
         return [
-             'title.required' => 'The title field is required',
-        'title.min' => 'The title must be at least 2 characters',
-        'title.max' => 'The title may not be greater than 255 characters',
-        'title.regex' => 'The title may only contain letters, numbers, spaces, dashes and underscores',
-        'body.required' => 'The content field is required',
-        'body.min' => 'The content must be at least 10 characters',
-        'body.not_regex' => 'Script tags are not allowed in the content',
+            'title.required' => 'The title field is required',
+            'title.min' => 'The title must be at least 2 characters',
+            'title.max' => 'The title may not be greater than 255 characters',
+            'title.regex' => 'The title may only contain letters, numbers, spaces, dashes and underscores',
+            'body.required' => 'The content field is required',
+            'body.min' => 'The content must be at least 10 characters',
+            'body.not_regex' => 'Script tags are not allowed in the content',
+            'category_id.required' => 'Please select a category',
+            'category_id.exists' => 'The selected category is invalid',
         ];
     }
 
     /**
-     * Get custom attribute names (for cleaner error messages)
+     * Attribute names (for cleaner error messages).
      */
     public function attributes(): array
     {
         return [
             'title' => 'Post Title',
             'body' => 'Post Content',
+            'category_id' => 'Category',
         ];
     }
 }

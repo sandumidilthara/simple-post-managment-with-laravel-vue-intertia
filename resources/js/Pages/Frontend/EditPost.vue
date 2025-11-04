@@ -67,6 +67,57 @@
                         </p>
                     </div>
 
+                    <!-- Tags Input -->
+                    <div class="mb-6">
+                        <label
+                            for="tags"
+                            class="block text-sm font-bold text-gray-300 mb-2"
+                        >
+                            Tags 🏷️
+                        </label>
+                        <p class="text-xs text-gray-400 mb-2">
+                            Type a tag and press Enter to add it
+                        </p>
+
+                        <!-- Tags Display -->
+                        <div
+                            v-if="form.tags.length > 0"
+                            class="flex flex-wrap gap-2 mb-3"
+                        >
+                            <span
+                                v-for="(tag, index) in form.tags"
+                                :key="index"
+                                class="inline-flex items-center bg-blue-600 text-white px-3 py-1.5 rounded-full text-sm font-semibold"
+                            >
+                                {{ tag }}
+                                <button
+                                    type="button"
+                                    @click="removeTag(index)"
+                                    class="ml-2 hover:text-red-300 transition-colors focus:outline-none"
+                                >
+                                    ✕
+                                </button>
+                            </span>
+                        </div>
+
+                        <!-- Tag Input Field -->
+                        <input
+                            id="tags"
+                            v-model="tagInput"
+                            @keydown.enter.prevent="addTag"
+                            @keydown.comma.prevent="addTag"
+                            type="text"
+                            class="w-full px-4 py-3 bg-gray-700 border-2 border-gray-600 text-white rounded-lg focus:ring-4 focus:ring-blue-500 focus:border-blue-500 transition-all placeholder-gray-500"
+                            placeholder="Type tag name and press Enter..."
+                        />
+                        <p class="text-xs text-gray-400 mt-1">
+                            Press Enter or Comma (,) to add tags
+                        </p>
+                        <p v-if="tagError" class="mt-2 text-sm text-red-500">
+                            {{ tagError }}
+                        </p>
+                    </div>
+
                     <!-- Body Textarea -->
                     <div class="mb-6">
                         <label
@@ -136,6 +187,7 @@
 
 <script setup>
 import { useForm } from "@inertiajs/vue3";
+import { ref } from "vue";
 
 const props = defineProps({
     post: {
@@ -152,11 +204,43 @@ const props = defineProps({
     },
 });
 
+// දැනටමත් තියෙන tags ගන්නවා
+const existingTags = props.post.tags
+    ? props.post.tags.map((tag) => tag.name)
+    : [];
+
 const form = useForm({
     title: props.post.title,
     body: props.post.body,
-    category_id: props.post.category_id, // Category field add කරන්න
+    category_id: props.post.category_id,
+    tags: existingTags, // දැනටමත් තියෙන tags
 });
+
+const tagInput = ref("");
+const tagError = ref("");
+
+const addTag = () => {
+    tagError.value = "";
+
+    const trimmedTag = tagInput.value.trim();
+
+    if (!trimmedTag) {
+        return;
+    }
+
+    if (form.tags.includes(trimmedTag)) {
+        tagError.value = "This tag is already added";
+        tagInput.value = "";
+        return;
+    }
+
+    form.tags.push(trimmedTag);
+    tagInput.value = "";
+};
+
+const removeTag = (index) => {
+    form.tags.splice(index, 1);
+};
 
 const submit = () => {
     form.put(route("posts.update", props.post.id));

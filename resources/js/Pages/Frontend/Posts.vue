@@ -24,15 +24,19 @@
 
             <!-- Header -->
             <div class="text-center mb-12">
-                <h1 class="text-5xl font-bold text-white mb-4">Blog Posts</h1>
-                <p class="text-xl text-gray-400">Latest articles and updates</p>
+                <h1 class="text-5xl font-bold text-white mb-4">
+                    Trending Posts 🔥
+                </h1>
+                <p class="text-xl text-gray-400">
+                    Explore what’s happening now ✨
+                </p>
             </div>
 
             <!-- Create Post Button - Blue -->
             <div class="mb-8 flex">
                 <a
                     :href="route('posts.create')"
-                    class="inline-flex items-center bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-8 rounded-lg transition-all duration-300 shadow-lg hover:shadow-xl"
+                    class="inline-flex items-center bg-gradient-to-r from-blue-500 to-green-500 hover:from-blue-600 hover:to-green-600 text-white font-bold py-3 px-8 rounded-lg transition-all duration-300 shadow-lg hover:shadow-xl"
                 >
                     <svg
                         class="w-5 h-5 mr-2"
@@ -61,11 +65,6 @@
                     :key="post.id"
                     class="bg-gray-800 border border-gray-700 rounded-lg shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden"
                 >
-                    <!-- Top Bar - Blue to Green gradient -->
-                    <div
-                        class="h-1 bg-gradient-to-r from-blue-500 to-green-500"
-                    ></div>
-
                     <!-- Post Content -->
                     <div class="p-6">
                         <!-- Title -->
@@ -85,6 +84,20 @@
                         >
                             {{ post.category.name }}
                         </h2>
+
+                        <!-- Tags Display -->
+                        <div
+                            v-if="post.tags && post.tags.length > 0"
+                            class="flex flex-wrap gap-2 mb-3"
+                        >
+                            <span
+                                v-for="tag in post.tags"
+                                :key="tag.id"
+                                class="inline-flex items-center bg-purple-600 text-white px-2 py-1 rounded-full text-xs font-semibold"
+                            >
+                                🏷️ {{ tag.name }}
+                            </span>
+                        </div>
 
                         <!-- Meta Info -->
                         <div
